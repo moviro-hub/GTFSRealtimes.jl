@@ -1,0 +1,12 @@
+name = "GTFSRealtimesGenerate"
+uuid = "b2c3d4e5-f6a7-8901-bcde-f234567890ab"
+authors = ["MOVIRO"]
+version = "0.1.0"
+
+[deps]
+Downloads = "f43a241f-c20a-4ad4-852c-f6b1247861c6"
+ProtoBuf = "3349acd9-ac6a-5e09-bcdb-63829b23a429"
+
+[compat]
+ProtoBuf = "1.2.0"
+julia = "1.9"

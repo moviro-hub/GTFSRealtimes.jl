@@ -1,0 +1,12 @@
+name = "GTFSRealtimesDocs"
+uuid = "d4e5f6g7-h8i9-0123-defg-456789012345"
+authors = ["MOVIRO"]
+version = "0.1.0"
+
+[deps]
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+GTFSRealtimes = "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+
+[compat]
+Documenter = "1.0"
+julia = "1.9"
