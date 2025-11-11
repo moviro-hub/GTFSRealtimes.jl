@@ -16,26 +16,9 @@ end
     @test isempty(feed.entities)
 end
 
-# Test download function (basic validation)
-@testset "Download Function" begin
-    # Test error handling for invalid inputs
-    @test_throws ArgumentError download_gtfs_realtime("", "test.pb")
-    @test_throws ArgumentError download_gtfs_realtime("http://example.com", "")
-
-    # Note: We don't test actual downloads to avoid network dependencies in tests
-end
-
-# Test read function (basic validation)
-@testset "Read Function" begin
-    # Test error handling for non-existent files
-    @test_throws ArgumentError read_gtfs_realtime("nonexistent.pb")
-
-    # Note: We don't test actual file reading without sample data
-end
-
 println("All tests completed successfully!")
 
-# Include additional test files in this directory (e.g., test_reader.jl, test_download.jl, test_example_read.jl)
+# Include additional test files in this directory (test_*.jl files)
 for file in filter(f -> startswith(f, "test_") && endswith(f, ".jl"), readdir(@__DIR__))
     # Avoid including this file again
     if file != basename(@__FILE__)

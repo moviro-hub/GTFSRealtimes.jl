@@ -72,7 +72,6 @@ using .transit_realtime: transit_realtime as GTFSProtoBuf
 include("types.jl")
 include("helpers.jl")
 include("io.jl")
-include("polyline.jl")
 include("shapes.jl")
 
 # Export main functions
