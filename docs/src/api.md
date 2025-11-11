@@ -77,10 +77,10 @@ Container for GTFS Realtime feed data with convenient access to header and entit
 
 ### Shape Compression and Decompression
 
-- [`decompress_shape`](@id decompress_shape): Decode the encoded_polyline field of a Shape entity into coordinates
-- [`compress_shape`](@id compress_shape): Encode coordinates into a Shape entity with encoded_polyline
+- `decompress_shape`: Decode the encoded_polyline field of a Shape entity into coordinates
+- `compress_shape`: Encode coordinates into a Shape entity with encoded_polyline
 
-#### [`decompress_shape`](@id decompress_shape)
+#### `decompress_shape`
 
 ```julia
 decompress_shape(shape::GTFSProtoBuf.Shape; precision::Int64=5) -> Vector{Tuple{Float32, Float32}}
@@ -102,7 +102,7 @@ coordinates = decompress_shape(shape)
 # Returns: [(38.5, -120.2), (40.7, -120.95), ...]
 ```
 
-#### [`compress_shape`](@id compress_shape)
+#### `compress_shape`
 
 ```julia
 compress_shape(shape_id::String, coordinates::Vector{Tuple{Float32, Float32}}; precision::Int64=5) -> GTFSProtoBuf.Shape
