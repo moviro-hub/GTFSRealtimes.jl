@@ -15,7 +15,6 @@ makedocs(
         "API Reference" => "api.md",
         "Examples" => "examples.md",
     ],
-    strict = true,
     checkdocs = :exports,
 )
 
