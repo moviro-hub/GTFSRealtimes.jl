@@ -1,9 +1,8 @@
-export encode_polyline, decode_polyline
 # Implementation of Google's Encoded Polyline Algorithm Format
 # See: https://developers.google.com/maps/documentation/utilities/polylinealgorithm
 
 """
-    encode_polyline(positions::Vector{Tuple{Float64, Float64}}, precision::Int64=5) -> String
+    encode_polyline(positions::Vector{Tuple{Float32, Float32}}, precision::Int64=5) -> String
 
 Encode a sequence of latitude/longitude coordinates as a polyline string using Google's algorithm.
 
@@ -30,7 +29,7 @@ positions = [(38.5, -120.2), (40.7, -120.95)]
 encoded = encode_polyline(positions)  # "_p~iF~ps|U_ulLnnqC"
 ```
 """
-function encode_polyline(positions::Vector{Tuple{Float64, Float64}}, precision::Int64=5)
+function encode_polyline(positions::Vector{Tuple{Float32, Float32}}, precision::Int64 = 5)
     isempty(positions) && return ""
     !(1 ≤ precision ≤ 11) && throw(ArgumentError("precision must be between 1 and 11"))
 
@@ -94,7 +93,7 @@ end
 
 
 """
-    decode_polyline(polyline::String; precision=5) -> Vector{Tuple{Float64, Float64}}
+    decode_polyline(polyline::String; precision=5) -> Vector{Tuple{Float32, Float32}}
 
 Decode a polyline string back into latitude/longitude coordinates using Google's algorithm.
 
@@ -119,8 +118,8 @@ encoded = "_p~iF~ps|U_ulLnnqC"
 positions = decode_polyline(encoded)  # Returns original coordinates
 ```
 """
-function decode_polyline(polyline::String; precision::Int64=5)
-    isempty(polyline) && return Tuple{Float64, Float64}[]
+function decode_polyline(polyline::String; precision::Int64 = 5)
+    isempty(polyline) && return Tuple{Float32, Float32}[]
     !(1 ≤ precision ≤ 11) && throw(ArgumentError("precision must be between 1 and 11"))
 
     factor = 10.0^precision
@@ -139,7 +138,7 @@ function decode_polyline(polyline::String; precision::Int64=5)
     isodd(length(coords)) && throw(ArgumentError("Invalid polyline: odd number of coordinates"))
 
     # Phase 2: Delta decoding (convert differences to absolute coordinates)
-    positions = Tuple{Float64, Float64}[]
+    positions = Tuple{Float32, Float32}[]
     sizehint!(positions, length(coords) ÷ 2)
 
     lat_sum = Int32(0)
@@ -148,11 +147,11 @@ function decode_polyline(polyline::String; precision::Int64=5)
     for i in 1:2:length(coords)
         # Add differences to running totals
         lat_sum += coords[i]
-        lon_sum += coords[i+1]
+        lon_sum += coords[i + 1]
 
         # Convert back to degrees: 3850000 / 100000 = 38.5
-        lat_deg = Float64(lat_sum / factor)
-        lon_deg = Float64(lon_sum / factor)
+        lat_deg = Float32(lat_sum / factor)
+        lon_deg = Float32(lon_sum / factor)
 
         position = (lat_deg, lon_deg)
         push!(positions, position)

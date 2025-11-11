@@ -83,7 +83,7 @@ Container for GTFS Realtime feed data with convenient access to header and entit
 #### [`decompress_shape`](@id decompress_shape)
 
 ```julia
-decompress_shape(shape::GTFSProtoBuf.Shape; precision::Int64=5) -> Vector{Tuple{Float64, Float64}}
+decompress_shape(shape::GTFSProtoBuf.Shape; precision::Int64=5) -> Vector{Tuple{Float32, Float32}}
 ```
 
 Decode the encoded_polyline field of a Shape entity into a vector of (latitude, longitude) coordinates.
@@ -93,7 +93,7 @@ Decode the encoded_polyline field of a Shape entity into a vector of (latitude, 
 - `precision`: Number of decimal places used in encoding (default: 5)
 
 **Returns:**
-- Vector of (latitude, longitude) tuples as Float64 values
+- Vector of (latitude, longitude) tuples as Float32 values
 
 **Examples:**
 ```julia
@@ -105,14 +105,14 @@ coordinates = decompress_shape(shape)
 #### [`compress_shape`](@id compress_shape)
 
 ```julia
-compress_shape(shape_id::String, coordinates::Vector{Tuple{Float64, Float64}}; precision::Int64=5) -> GTFSProtoBuf.Shape
+compress_shape(shape_id::String, coordinates::Vector{Tuple{Float32, Float32}}; precision::Int64=5) -> GTFSProtoBuf.Shape
 ```
 
 Encode a vector of (latitude, longitude) coordinates into a Shape entity with encoded_polyline.
 
 **Arguments:**
 - `shape_id`: Identifier for the shape
-- `coordinates`: Vector of (latitude, longitude) tuples as Float64 values
+- `coordinates`: Vector of (latitude, longitude) tuples as Float32 values
 - `precision`: Number of decimal places to preserve in encoding (default: 5)
 
 **Returns:**

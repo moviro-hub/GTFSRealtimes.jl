@@ -1,7 +1,7 @@
 # Shape compression and decompression functions using polyline encoding
 
 """
-    decompress_shape(shape::GTFSProtoBuf.Shape; precision::Int64=5) -> Vector{Tuple{Float64, Float64}}
+    decompress_shape(shape::GTFSProtoBuf.Shape; precision::Int64=5) -> Vector{Tuple{Float32, Float32}}
 
 Decode the encoded_polyline field of a Shape entity into a vector of (latitude, longitude) coordinates.
 
@@ -10,7 +10,7 @@ Decode the encoded_polyline field of a Shape entity into a vector of (latitude, 
 - `precision`: Number of decimal places used in encoding (default: 5)
 
 # Returns
-- Vector of (latitude, longitude) tuples as Float64 values
+- Vector of (latitude, longitude) tuples as Float32 values
 
 # Examples
 ```julia
@@ -22,24 +22,24 @@ coordinates = decompress_shape(shape)
 # Throws
 - `ArgumentError` if the polyline string is invalid or has odd number of coordinates
 """
-function decompress_shape(shape::GTFSProtoBuf.Shape; precision::Int64=5)::Vector{Tuple{Float64, Float64}}
+function decompress_shape(shape::GTFSProtoBuf.Shape; precision::Int64 = 5)::Vector{Tuple{Float32, Float32}}
     if isempty(shape.encoded_polyline)
-        return Tuple{Float64, Float64}[]
+        return Tuple{Float32, Float32}[]
     end
 
     # Decode polyline using the polyline.jl functions
-    # decode_polyline already returns Tuple{Float64, Float64}[]
-    return decode_polyline(shape.encoded_polyline; precision=precision)
+    # decode_polyline already returns Tuple{Float32, Float32}[]
+    return decode_polyline(shape.encoded_polyline; precision = precision)
 end
 
 """
-    compress_shape(shape_id::String, coordinates::Vector{Tuple{Float64, Float64}}; precision::Int64=5) -> GTFSProtoBuf.Shape
+    compress_shape(shape_id::String, coordinates::Vector{Tuple{Float32, Float32}}; precision::Int64=5) -> GTFSProtoBuf.Shape
 
 Encode a vector of (latitude, longitude) coordinates into a Shape entity with encoded_polyline.
 
 # Arguments
 - `shape_id`: Identifier for the shape
-- `coordinates`: Vector of (latitude, longitude) tuples as Float64 values
+- `coordinates`: Vector of (latitude, longitude) tuples as Float32 values
 - `precision`: Number of decimal places to preserve in encoding (default: 5)
 
 # Returns
@@ -54,12 +54,12 @@ shape = compress_shape("shape_123", coords)
 # Throws
 - `ArgumentError` if coordinates vector is empty or precision is invalid
 """
-function compress_shape(shape_id::String, coordinates::Vector{Tuple{Float64, Float64}}; precision::Int64=5)::GTFSProtoBuf.Shape
+function compress_shape(shape_id::String, coordinates::Vector{Tuple{Float32, Float32}}; precision::Int64 = 5)::GTFSProtoBuf.Shape
     if isempty(coordinates)
         return GTFSProtoBuf.Shape(shape_id, "")
     end
 
-    # encode_polyline already accepts Vector{Tuple{Float64, Float64}}
+    # encode_polyline already accepts Vector{Tuple{Float32, Float32}}
     encoded = encode_polyline(coordinates, precision)
 
     return GTFSProtoBuf.Shape(shape_id, encoded)
