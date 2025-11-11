@@ -71,6 +71,8 @@ using .transit_realtime: transit_realtime as GTFSProtoBuf
 # Include type definitions and I/O functions
 include("types.jl")
 include("io.jl")
+include("polyline.jl")
+include("shapes.jl")
 
 # Export main functions
 export download_gtfs_realtime, read_gtfs_realtime
@@ -82,8 +84,10 @@ export GTFSRealtime
 export GTFSProtoBuf
 
 # Export helper functions
-export has_trip_updates, has_vehicle_positions, has_alerts
-export get_trip_updates, get_vehicle_positions, get_alerts
+export has_trip_updates, has_vehicle_positions, has_alerts, has_shapes, has_stops, has_trip_modifications
+export get_trip_updates, get_vehicle_positions, get_alerts, get_shapes, get_stops, get_trip_modifications
+export decompress_shape, compress_shape
+export encode_polyline, decode_polyline
 
 # Implement the decode_protobuf function now that GTFSProtoBuf is available
 function decode_protobuf(data::Vector{UInt8})

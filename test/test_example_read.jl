@@ -12,6 +12,9 @@ using GTFSRealtimes, Test
             @test get_trip_updates(feed) isa Vector
             @test get_vehicle_positions(feed) isa Vector
             @test get_alerts(feed) isa Vector
+            @test get_shapes(feed) isa Vector
+            @test get_stops(feed) isa Vector
+            @test get_trip_modifications(feed) isa Vector
         end
     end
 end
