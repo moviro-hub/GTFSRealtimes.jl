@@ -1,4 +1,42 @@
 """
+    LatLon
+
+NamedTuple type for latitude/longitude coordinates.
+
+# Fields
+- `lat::Float32`: Latitude in degrees
+- `lon::Float32`: Longitude in degrees
+
+# Examples
+```julia
+coord = (lat=38.5f0, lon=-120.2f0)
+coord = LatLon(38.5, -120.2)
+```
+"""
+const LatLon = NamedTuple{(:lat, :lon), Tuple{Float32, Float32}}
+
+"""
+    LatLon(lat::Number, lon::Number) -> LatLon
+
+Constructor for creating a LatLon coordinate.
+
+# Arguments
+- `lat::Number`: Latitude in degrees (will be converted to Float32)
+- `lon::Number`: Longitude in degrees (will be converted to Float32)
+
+# Returns
+- `LatLon`: NamedTuple with lat and lon fields
+
+# Examples
+```julia
+coord = LatLon(38.5, -120.2)
+coord.lat  # 38.5f0
+coord.lon  # -120.2f0
+```
+"""
+LatLon(lat::Number, lon::Number) = (lat = Float32(lat), lon = Float32(lon))
+
+"""
     GTFSRealtime
 
 Container for GTFS Realtime feed data with convenient access to header and entities.
@@ -31,57 +69,3 @@ Create an empty GTFS Realtime feed.
 GTFSRealtime() = GTFSRealtime(nothing, GTFSProtoBuf.FeedEntity[])
 
 # Use the default struct constructor for GTFSRealtime(header, entities)
-
-"""
-    has_trip_updates(feed::GTFSRealtime) -> Bool
-
-Check if the feed contains any trip update entities.
-"""
-function has_trip_updates(feed::GTFSRealtime)::Bool
-    return findfirst(entity -> entity.trip_update !== nothing, feed.entities) !== nothing
-end
-
-"""
-    has_vehicle_positions(feed::GTFSRealtime) -> Bool
-
-Check if the feed contains any vehicle position entities.
-"""
-function has_vehicle_positions(feed::GTFSRealtime)::Bool
-    return findfirst(entity -> entity.vehicle !== nothing, feed.entities) !== nothing
-end
-
-"""
-    has_alerts(feed::GTFSRealtime) -> Bool
-
-Check if the feed contains any alert entities.
-"""
-function has_alerts(feed::GTFSRealtime)::Bool
-    return findfirst(entity -> entity.alert !== nothing, feed.entities) !== nothing
-end
-
-"""
-    get_trip_updates(feed::GTFSRealtime) -> Vector
-
-Get all trip update entities from the feed.
-"""
-function get_trip_updates(feed::GTFSRealtime)
-    return filter(entity -> entity.trip_update !== nothing, feed.entities)
-end
-
-"""
-    get_vehicle_positions(feed::GTFSRealtime) -> Vector
-
-Get all vehicle position entities from the feed.
-"""
-function get_vehicle_positions(feed::GTFSRealtime)
-    return filter(entity -> entity.vehicle !== nothing, feed.entities)
-end
-
-"""
-    get_alerts(feed::GTFSRealtime) -> Vector
-
-Get all alert entities from the feed.
-"""
-function get_alerts(feed::GTFSRealtime)
-    return filter(entity -> entity.alert !== nothing, feed.entities)
-end

@@ -1,0 +1,109 @@
+# Helper functions for checking and extracting entity types from GTFS Realtime feeds
+
+"""
+    has_trip_updates(feed::GTFSRealtime) -> Bool
+
+Check if the feed contains any trip update entities.
+"""
+function has_trip_updates(feed::GTFSRealtime)::Bool
+    return findfirst(entity -> entity.trip_update !== nothing, feed.entities) !== nothing
+end
+
+"""
+    has_vehicle_positions(feed::GTFSRealtime) -> Bool
+
+Check if the feed contains any vehicle position entities.
+"""
+function has_vehicle_positions(feed::GTFSRealtime)::Bool
+    return findfirst(entity -> entity.vehicle !== nothing, feed.entities) !== nothing
+end
+
+"""
+    has_alerts(feed::GTFSRealtime) -> Bool
+
+Check if the feed contains any alert entities.
+"""
+function has_alerts(feed::GTFSRealtime)::Bool
+    return findfirst(entity -> entity.alert !== nothing, feed.entities) !== nothing
+end
+
+"""
+    has_shapes(feed::GTFSRealtime) -> Bool
+
+Check if the feed contains any shape entities.
+"""
+function has_shapes(feed::GTFSRealtime)::Bool
+    return findfirst(entity -> entity.shape !== nothing, feed.entities) !== nothing
+end
+
+"""
+    has_stops(feed::GTFSRealtime) -> Bool
+
+Check if the feed contains any stop entities.
+"""
+function has_stops(feed::GTFSRealtime)::Bool
+    return findfirst(entity -> entity.stop !== nothing, feed.entities) !== nothing
+end
+
+"""
+    has_trip_modifications(feed::GTFSRealtime) -> Bool
+
+Check if the feed contains any trip modification entities.
+"""
+function has_trip_modifications(feed::GTFSRealtime)::Bool
+    return findfirst(entity -> entity.trip_modifications !== nothing, feed.entities) !== nothing
+end
+
+"""
+    get_trip_updates(feed::GTFSRealtime) -> Vector
+
+Get all trip update entities from the feed.
+"""
+function get_trip_updates(feed::GTFSRealtime)
+    return filter(entity -> entity.trip_update !== nothing, feed.entities)
+end
+
+"""
+    get_vehicle_positions(feed::GTFSRealtime) -> Vector
+
+Get all vehicle position entities from the feed.
+"""
+function get_vehicle_positions(feed::GTFSRealtime)
+    return filter(entity -> entity.vehicle !== nothing, feed.entities)
+end
+
+"""
+    get_alerts(feed::GTFSRealtime) -> Vector
+
+Get all alert entities from the feed.
+"""
+function get_alerts(feed::GTFSRealtime)
+    return filter(entity -> entity.alert !== nothing, feed.entities)
+end
+
+"""
+    get_shapes(feed::GTFSRealtime) -> Vector
+
+Get all shape entities from the feed.
+"""
+function get_shapes(feed::GTFSRealtime)
+    return filter(entity -> entity.shape !== nothing, feed.entities)
+end
+
+"""
+    get_stops(feed::GTFSRealtime) -> Vector
+
+Get all stop entities from the feed.
+"""
+function get_stops(feed::GTFSRealtime)
+    return filter(entity -> entity.stop !== nothing, feed.entities)
+end
+
+"""
+    get_trip_modifications(feed::GTFSRealtime) -> Vector
+
+Get all trip modification entities from the feed.
+"""
+function get_trip_modifications(feed::GTFSRealtime)
+    return filter(entity -> entity.trip_modifications !== nothing, feed.entities)
+end
