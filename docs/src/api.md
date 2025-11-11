@@ -40,6 +40,28 @@ feed = read_gtfs_realtime("trip_updates.pb")
 
 ## Data Types
 
+### [`LatLon`](@id LatLon)
+
+```julia
+LatLon(lat::Number, lon::Number) -> LatLon
+```
+
+Constructor for creating a LatLon coordinate (NamedTuple with `lat` and `lon` fields).
+
+**Arguments:**
+- `lat::Number`: Latitude in degrees (will be converted to Float32)
+- `lon::Number`: Longitude in degrees (will be converted to Float32)
+
+**Returns:**
+- `LatLon`: NamedTuple with `lat::Float32` and `lon::Float32` fields
+
+**Examples:**
+```julia
+coord = LatLon(38.5, -120.2)
+coord.lat  # 38.5f0
+coord.lon  # -120.2f0
+```
+
 ### [`GTFSRealtime`](@id GTFSRealtime)
 
 ```julia
@@ -83,36 +105,36 @@ Container for GTFS Realtime feed data with convenient access to header and entit
 #### `decompress_shape`
 
 ```julia
-decompress_shape(shape::GTFSProtoBuf.Shape; precision::Int64=5) -> Vector{Tuple{Float32, Float32}}
+decompress_shape(shape::GTFSProtoBuf.Shape; precision::Int64=5) -> Vector{LatLon}
 ```
 
-Decode the encoded_polyline field of a Shape entity into a vector of (latitude, longitude) coordinates.
+Decode the encoded_polyline field of a Shape entity into a vector of LatLon coordinates.
 
 **Arguments:**
 - `shape`: A Shape entity from GTFS Realtime
 - `precision`: Number of decimal places used in encoding (default: 5)
 
 **Returns:**
-- Vector of (latitude, longitude) tuples as Float32 values
+- Vector of LatLon coordinates (NamedTuple with `lat` and `lon` fields)
 
 **Examples:**
 ```julia
 shape = get_shapes(feed)[1].shape
 coordinates = decompress_shape(shape)
-# Returns: [(38.5, -120.2), (40.7, -120.95), ...]
+# Returns: [(lat=38.5f0, lon=-120.2f0), (lat=40.7f0, lon=-120.95f0), ...]
 ```
 
 #### `compress_shape`
 
 ```julia
-compress_shape(shape_id::String, coordinates::Vector{Tuple{Float32, Float32}}; precision::Int64=5) -> GTFSProtoBuf.Shape
+compress_shape(shape_id::String, coordinates::Vector{LatLon}; precision::Int64=5) -> GTFSProtoBuf.Shape
 ```
 
-Encode a vector of (latitude, longitude) coordinates into a Shape entity with encoded_polyline.
+Encode a vector of LatLon coordinates into a Shape entity with encoded_polyline.
 
 **Arguments:**
 - `shape_id`: Identifier for the shape
-- `coordinates`: Vector of (latitude, longitude) tuples as Float32 values
+- `coordinates`: Vector of LatLon coordinates (NamedTuple with `lat` and `lon` fields)
 - `precision`: Number of decimal places to preserve in encoding (default: 5)
 
 **Returns:**
@@ -120,6 +142,6 @@ Encode a vector of (latitude, longitude) coordinates into a Shape entity with en
 
 **Examples:**
 ```julia
-coords = [(38.5, -120.2), (40.7, -120.95)]
+coords = [LatLon(38.5, -120.2), LatLon(40.7, -120.95)]
 shape = compress_shape("shape_123", coords)
 ```

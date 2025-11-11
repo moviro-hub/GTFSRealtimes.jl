@@ -2,12 +2,12 @@
 # See: https://developers.google.com/maps/documentation/utilities/polylinealgorithm
 
 """
-    encode_polyline(positions::Vector{Tuple{Float32, Float32}}, precision::Int64=5) -> String
+    encode_polyline(positions::Vector{LatLon}, precision::Int64=5) -> String
 
 Encode a sequence of latitude/longitude coordinates as a polyline string using Google's algorithm.
 
 # Arguments
-- `positions`: Vector of (latitude, longitude) tuples (in degrees)
+- `positions`: Vector of LatLon coordinates (in degrees)
 - `precision`: Number of decimal places to preserve (default: 5)
 
 # Returns
@@ -25,11 +25,11 @@ Encode a sequence of latitude/longitude coordinates as a polyline string using G
 
 # Example
 ```julia
-positions = [(38.5, -120.2), (40.7, -120.95)]
+positions = [LatLon(38.5, -120.2), LatLon(40.7, -120.95)]
 encoded = encode_polyline(positions)  # "_p~iF~ps|U_ulLnnqC"
 ```
 """
-function encode_polyline(positions::Vector{Tuple{Float32, Float32}}, precision::Int64 = 5)
+function encode_polyline(positions::Vector{LatLon}, precision::Int64 = 5)
     isempty(positions) && return ""
     !(1 ≤ precision ≤ 11) && throw(ArgumentError("precision must be between 1 and 11"))
 
@@ -43,8 +43,8 @@ function encode_polyline(positions::Vector{Tuple{Float32, Float32}}, precision::
 
     for position in positions
         # Step 1: Convert to integers (38.5 * 100000 = 3850000)
-        lat = round(Int32, position[1] * factor)
-        lon = round(Int32, position[2] * factor)
+        lat = round(Int32, position.lat * factor)
+        lon = round(Int32, position.lon * factor)
 
         # Delta encoding: current - previous (can be negative)
         diff_lat = lat - previous_lat
@@ -93,7 +93,7 @@ end
 
 
 """
-    decode_polyline(polyline::String; precision=5) -> Vector{Tuple{Float32, Float32}}
+    decode_polyline(polyline::String; precision=5) -> Vector{LatLon}
 
 Decode a polyline string back into latitude/longitude coordinates using Google's algorithm.
 
@@ -102,7 +102,7 @@ Decode a polyline string back into latitude/longitude coordinates using Google's
 - `precision`: Number of decimal places used in encoding (default: 5)
 
 # Returns
-- Vector of (latitude, longitude) tuples (in degrees)
+- Vector of LatLon coordinates (in degrees)
 
 # Algorithm (reverse of encoding):
 1. Convert ASCII characters back to values by subtracting 63
@@ -115,11 +115,11 @@ Decode a polyline string back into latitude/longitude coordinates using Google's
 # Example
 ```julia
 encoded = "_p~iF~ps|U_ulLnnqC"
-positions = decode_polyline(encoded)  # Returns original coordinates
+positions = decode_polyline(encoded)  # Returns LatLon coordinates
 ```
 """
 function decode_polyline(polyline::String; precision::Int64 = 5)
-    isempty(polyline) && return Tuple{Float32, Float32}[]
+    isempty(polyline) && return LatLon[]
     !(1 ≤ precision ≤ 11) && throw(ArgumentError("precision must be between 1 and 11"))
 
     factor = 10.0^precision
@@ -138,7 +138,7 @@ function decode_polyline(polyline::String; precision::Int64 = 5)
     isodd(length(coords)) && throw(ArgumentError("Invalid polyline: odd number of coordinates"))
 
     # Phase 2: Delta decoding (convert differences to absolute coordinates)
-    positions = Tuple{Float32, Float32}[]
+    positions = LatLon[]
     sizehint!(positions, length(coords) ÷ 2)
 
     lat_sum = Int32(0)
@@ -153,7 +153,7 @@ function decode_polyline(polyline::String; precision::Int64 = 5)
         lat_deg = Float32(lat_sum / factor)
         lon_deg = Float32(lon_sum / factor)
 
-        position = (lat_deg, lon_deg)
+        position = (lat = lat_deg, lon = lon_deg)
         push!(positions, position)
     end
 

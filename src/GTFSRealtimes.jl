@@ -78,7 +78,7 @@ include("shapes.jl")
 export download_gtfs_realtime, read_gtfs_realtime
 
 # Export main types
-export GTFSRealtime
+export GTFSRealtime, LatLon
 
 # Export GTFSProtoBuf types for advanced usage
 export GTFSProtoBuf

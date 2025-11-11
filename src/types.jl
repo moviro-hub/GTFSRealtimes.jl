@@ -1,4 +1,42 @@
 """
+    LatLon
+
+NamedTuple type for latitude/longitude coordinates.
+
+# Fields
+- `lat::Float32`: Latitude in degrees
+- `lon::Float32`: Longitude in degrees
+
+# Examples
+```julia
+coord = (lat=38.5f0, lon=-120.2f0)
+coord = LatLon(38.5, -120.2)
+```
+"""
+const LatLon = NamedTuple{(:lat, :lon), Tuple{Float32, Float32}}
+
+"""
+    LatLon(lat::Number, lon::Number) -> LatLon
+
+Constructor for creating a LatLon coordinate.
+
+# Arguments
+- `lat::Number`: Latitude in degrees (will be converted to Float32)
+- `lon::Number`: Longitude in degrees (will be converted to Float32)
+
+# Returns
+- `LatLon`: NamedTuple with lat and lon fields
+
+# Examples
+```julia
+coord = LatLon(38.5, -120.2)
+coord.lat  # 38.5f0
+coord.lon  # -120.2f0
+```
+"""
+LatLon(lat::Number, lon::Number) = (lat = Float32(lat), lon = Float32(lon))
+
+"""
     GTFSRealtime
 
 Container for GTFS Realtime feed data with convenient access to header and entities.
