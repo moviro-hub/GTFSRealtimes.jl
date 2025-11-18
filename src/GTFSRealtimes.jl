@@ -86,7 +86,7 @@ export get_trip_updates, get_vehicle_positions, get_alerts, get_shapes, get_stop
 
 # Export LatLon type and shape compression/decompression functions
 export decompress_shape, compress_shape
-public LatLon
+# public LatLon
 
 
 end # module GTFSRealtimes
