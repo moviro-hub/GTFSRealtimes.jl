@@ -2,6 +2,30 @@
 # Implementation of Google's Encoded Polyline Algorithm Format
 # See: https://developers.google.com/maps/documentation/utilities/polylinealgorithm
 
+
+const LatLon = NamedTuple{(:lat, :lon), Tuple{Float32, Float32}}
+
+"""
+    LatLon(lat::Number, lon::Number) -> LatLon
+
+Constructor for creating a NamedTuple with `lat` and `lon` fields.
+
+# Arguments
+- `lat::Number`: Latitude in degrees (will be converted to Float32)
+- `lon::Number`: Longitude in degrees (will be converted to Float32)
+
+# Returns
+- `LatLon`: NamedTuple with lat and lon fields
+
+# Examples
+```julia
+coord = LatLon(38.5, -120.2)
+coord.lat  # 38.5f0
+coord.lon  # -120.2f0
+```
+"""
+LatLon(lat::Number, lon::Number) = (lat = Float32(lat), lon = Float32(lon))
+
 """
     encode_polyline(positions::Vector{LatLon}, precision::Int64=5) -> String
 

@@ -5,7 +5,7 @@ using GTFSRealtimes, Test
     for file in filter(f -> endswith(f, ".pb"), readdir(example_dir))
         path = joinpath(example_dir, file)
         @testset "Parse $(file)" begin
-            feed = read_gtfs_realtime(path)
+            feed = read_gtfsrt(path)
             @test feed isa GTFSRealtime
             @test feed.header !== nothing
             @test feed.entities isa Vector{GTFSProtoBuf.FeedEntity}

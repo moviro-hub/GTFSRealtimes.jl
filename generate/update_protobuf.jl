@@ -5,20 +5,24 @@ using Pkg
 Pkg.activate(@__DIR__)
 using ProtoBuf
 
-
-# Get the project root directory
-project_root = dirname(@__DIR__)
+# Official GTFS Realtime protobuf URL
+proto_url = "https://gtfs.org/documentation/realtime/gtfs-realtime.proto"
+# Protobuf and output directories
 proto_dir = joinpath(@__DIR__, "proto")
-output_dir = joinpath(project_root, "src")
+output_dir = joinpath(dirname(@__DIR__), "src")
+# Proto filename
+proto_file = "gtfs-realtime.proto"
 
-# Check if proto file exists
-gtfs_realtime_proto = joinpath(proto_dir, "gtfs-realtime.proto")
-
-isfile(gtfs_realtime_proto) || error("gtfs-realtime.proto not found at $gtfs_realtime_proto")
-
+# Download the .proto file
 try
-    # Generate Julia code from proto file
-    protojl(["gtfs-realtime.proto"], proto_dir, output_dir)
+    Downloads.download(proto_url, joinpath(proto_dir, proto_file))
+catch e
+    error("Error downloading protobuf definition: $e")
+end
+
+# Generate Julia code from proto file
+try
+    protojl([proto_file], proto_dir, output_dir)
 catch e
     error("Error generating protobuf files: $e")
 end

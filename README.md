@@ -2,14 +2,11 @@
 
 [Documentation](https://moviro-hub.github.io/GTFSRealtimes.jl/)
 
-A Julia package for downloading and reading GTFS Realtime feeds using Protocol Buffers.
+A Julia package for downloading and reading GTFS Realtime feeds.
 
-## Features
+## Overview
 
-- **GTFS Realtime Support**: Download and read GTFS Realtime feeds from transit agencies
-- **Protocol Buffer Integration**: Native support for GTFS Realtime protobuf format
-- **Automatic Updates**: Protobuf definitions are automatically generated from the official GTFS Realtime specification
-- **Compression Support**: Handles gzip-compressed feeds commonly used in production
+GTFSRealtimes.jl supports downloading feeds from transit agencies and parsing them with the official GTFS Realtime protobuf specification.
 
 ## Installation
 
@@ -24,10 +21,10 @@ Pkg.add(url="https://github.com/moviro-hub/GTFSRealtimes.jl")
 using GTFSRealtimes
 
 # Download a GTFS Realtime feed
-download_gtfs_realtime("https://api.example.com/gtfs-realtime/trip-updates", "trip_updates.pb")
+download_gtfsrt("https://api.example.com/gtfs-realtime/trip-updates", "trip_updates.pb")
 
 # Read the downloaded feed
-feed = read_gtfs_realtime("trip_updates.pb")
+feed = read_gtfsrt("trip_updates.pb")
 
 # Access feed data
 println("Feed version: ", feed.header.gtfs_realtime_version)
@@ -39,7 +36,7 @@ println("Number of entities: ", length(feed.entities))
 This package implements the official GTFS Realtime specification:
 https://gtfs.org/documentation/realtime/reference/
 
-The protobuf definitions are automatically generated from the official specification at:
+The protobuf definitions are generated from the official specification:
 https://gtfs.org/documentation/realtime/gtfs-realtime.proto
 
 ## License

@@ -12,8 +12,8 @@ A Julia package for downloading and reading GTFS Realtime feeds using Protocol B
 
 ## Main Functions
 
-- [`download_gtfs_realtime`](@ref): Download GTFS Realtime feeds from URLs
-- [`read_gtfs_realtime`](@ref): Read GTFS Realtime feeds from protobuf files
+- [`download_gtfsrt`](@ref): Download GTFS Realtime feeds from URLs
+- [`read_gtfsrt`](@ref): Read GTFS Realtime feeds from protobuf files
 
 ## Data Types
 
@@ -28,10 +28,10 @@ A Julia package for downloading and reading GTFS Realtime feeds using Protocol B
 using GTFSRealtimes
 
 # Download a GTFS Realtime feed
-download_gtfs_realtime("https://api.example.com/gtfs-realtime/trip-updates", "trip_updates.pb")
+download_gtfsrt("https://api.example.com/gtfs-realtime/trip-updates", "trip_updates.pb")
 
 # Read the downloaded feed
-feed = read_gtfs_realtime("trip_updates.pb")
+feed = read_gtfsrt("trip_updates.pb")
 
 # Access feed data
 println("Feed version: ", feed.header.gtfs_realtime_version)
@@ -64,35 +64,28 @@ module GTFSRealtimes
 using ProtoBuf: decode, ProtoDecoder, PipeBuffer
 using Downloads
 
-# Include protobuf definitions
+# Include protobuf definitions following julia conventions
 include("transit_realtime/transit_realtime.jl")
 using .transit_realtime: transit_realtime as GTFSProtoBuf
 
-# Include type definitions and I/O functions
 include("types.jl")
-include("helpers.jl")
 include("io.jl")
+include("helpers.jl")
 include("shapes.jl")
 
+# Export main type
+export GTFSRealtime
+
 # Export main functions
-export download_gtfs_realtime, read_gtfs_realtime
-
-# Export main types
-export GTFSRealtime, LatLon
-
-# Export GTFSProtoBuf types for advanced usage
-export GTFSProtoBuf
+export download_gtfsrt, read_gtfsrt
 
 # Export helper functions
 export has_trip_updates, has_vehicle_positions, has_alerts, has_shapes, has_stops, has_trip_modifications
 export get_trip_updates, get_vehicle_positions, get_alerts, get_shapes, get_stops, get_trip_modifications
-export decompress_shape, compress_shape
 
-# Implement the decode_protobuf function now that GTFSProtoBuf is available
-function decode_protobuf(data::Vector{UInt8})
-    # Create a decoder over an IO buffer for the protobuf data
-    decoder = ProtoDecoder(IOBuffer(data))
-    return decode(decoder, GTFSProtoBuf.FeedMessage)
-end
+# Export LatLon type and shape compression/decompression functions
+export decompress_shape, compress_shape
+public LatLon
+
 
 end # module GTFSRealtimes
