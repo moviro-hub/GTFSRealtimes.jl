@@ -1,5 +1,5 @@
 """
-    download_gtfs_realtime(url::String, file::String)
+    download_gtfsrt(url::String, file::String)
 
 Download a GTFS Realtime feed from a URL and save it to a file.
 
@@ -9,13 +9,13 @@ Download a GTFS Realtime feed from a URL and save it to a file.
 
 # Examples
 ```julia
-download_gtfs_realtime("https://api.example.com/gtfs-realtime/trip-updates", "trip_updates.pb")
+download_gtfsrt("https://api.example.com/gtfs-realtime/trip-updates", "trip_updates.pb")
 ```
 
 # Throws
 - `ArgumentError`: If the URL is invalid or download fails
 """
-function download_gtfs_realtime(url::String, file::String)
+function download_gtfsrt(url::String, file::String)
     if isempty(url)
         throw(ArgumentError("URL cannot be empty"))
     end
@@ -48,7 +48,7 @@ function download_gtfs_realtime(url::String, file::String)
 end
 
 """
-    read_gtfs_realtime(file::String) -> GTFSRealtime
+    read_gtfsrt(file::String) -> GTFSRealtime
 
 Read a GTFS Realtime feed from a protobuf file.
 
@@ -60,7 +60,7 @@ Read a GTFS Realtime feed from a protobuf file.
 
 # Examples
 ```julia
-feed = read_gtfs_realtime("trip_updates.pb")
+feed = read_gtfsrt("trip_updates.pb")
 println("Feed version: ", feed.header.gtfs_realtime_version)
 println("Number of entities: ", length(feed.entities))
 ```
@@ -69,7 +69,7 @@ println("Number of entities: ", length(feed.entities))
 - `ArgumentError`: If the file doesn't exist or cannot be read
 - `ProtoBuf.ProtoError`: If the file is not valid protobuf data
 """
-function read_gtfs_realtime(file::String)::GTFSRealtime
+function read_gtfsrt(file::String)::GTFSRealtime
     if !isfile(file)
         throw(ArgumentError("File '$file' does not exist"))
     end
@@ -102,4 +102,8 @@ function read_gtfs_realtime(file::String)::GTFSRealtime
     end
 end
 
-# decode_protobuf function is implemented in the main module where GTFSProtoBuf is available
+function decode_protobuf(data::Vector{UInt8})
+    # Create a decoder over an IO buffer for the protobuf data
+    decoder = ProtoDecoder(IOBuffer(data))
+    return decode(decoder, GTFSProtoBuf.FeedMessage)
+end

@@ -16,12 +16,7 @@ end
     @test isempty(feed.entities)
 end
 
-println("All tests completed successfully!")
-
 # Include additional test files in this directory (test_*.jl files)
-for file in filter(f -> startswith(f, "test_") && endswith(f, ".jl"), readdir(@__DIR__))
-    # Avoid including this file again
-    if file != basename(@__FILE__)
-        include(joinpath(@__DIR__, file))
-    end
+for file in filter(f -> startswith(f, "test_") && endswith(f, ".jl") && f != "runtests.jl", readdir(@__DIR__))
+    include(joinpath(@__DIR__, file))
 end
