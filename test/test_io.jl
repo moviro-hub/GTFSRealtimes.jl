@@ -4,18 +4,18 @@ using GTFSRealtimes, Test
     @testset "Download Function" begin
         @testset "Input Validation" begin
             # Test empty URL
-            @test_throws ArgumentError download_gtfs_realtime("", "test.pb")
+            @test_throws ArgumentError download_gtfsrt("", "test.pb")
 
             # Test empty file path
-            @test_throws ArgumentError download_gtfs_realtime("http://example.com", "")
+            @test_throws ArgumentError download_gtfsrt("http://example.com", "")
 
             # Test invalid URL format (basic check)
-            @test_throws ArgumentError download_gtfs_realtime("not-a-url", "test.pb")
+            @test_throws ArgumentError download_gtfsrt("not-a-url", "test.pb")
         end
 
         @testset "Network Error Handling" begin
             # Test with non-existent domain
-            @test_throws ArgumentError download_gtfs_realtime("http://nonexistent-domain-12345.com/feed", "test.pb")
+            @test_throws ArgumentError download_gtfsrt("http://nonexistent-domain-12345.com/feed", "test.pb")
         end
 
         # Note: We skip actual successful downloads to avoid network dependencies
@@ -26,10 +26,10 @@ using GTFSRealtimes, Test
     @testset "Read Function" begin
         @testset "File Validation" begin
             # Test non-existent file
-            @test_throws ArgumentError read_gtfs_realtime("nonexistent_file.pb")
+            @test_throws ArgumentError read_gtfsrt("nonexistent_file.pb")
 
             # Test empty file path
-            @test_throws ArgumentError read_gtfs_realtime("")
+            @test_throws ArgumentError read_gtfsrt("")
         end
 
         @testset "Protobuf Parsing" begin
@@ -40,7 +40,7 @@ using GTFSRealtimes, Test
             end
 
             try
-                @test_throws ArgumentError read_gtfs_realtime(temp_file)
+                @test_throws ArgumentError read_gtfsrt(temp_file)
             finally
                 rm(temp_file, force = true)
             end
@@ -52,7 +52,7 @@ using GTFSRealtimes, Test
             end
 
             try
-                @test_throws ArgumentError read_gtfs_realtime(temp_file)
+                @test_throws ArgumentError read_gtfsrt(temp_file)
             finally
                 rm(temp_file, force = true)
             end

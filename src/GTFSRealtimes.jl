@@ -64,9 +64,10 @@ module GTFSRealtimes
 using ProtoBuf: decode, ProtoDecoder, PipeBuffer
 using Downloads
 
-# Include protobuf definitions following julia conventions
+# Include protobuf submodule with a name following julia conventions and export the module under this name
 include("transit_realtime/transit_realtime.jl")
 using .transit_realtime: transit_realtime as GTFSProtoBuf
+export GTFSProtoBuf
 
 include("types.jl")
 include("io.jl")
@@ -85,7 +86,7 @@ export get_trip_updates, get_vehicle_positions, get_alerts, get_shapes, get_stop
 
 # Export LatLon type and shape compression/decompression functions
 export decompress_shape, compress_shape
-public LatLon
+# public LatLon
 
 
 end # module GTFSRealtimes
