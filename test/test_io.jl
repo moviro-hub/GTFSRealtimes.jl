@@ -23,6 +23,16 @@ using GTFSRealtimes, Test
         # a known test endpoint
     end
 
+    @testset "Fetch Function" begin
+        @testset "Input Validation" begin
+            @test_throws ArgumentError fetch_gtfsrt("")
+        end
+
+        @testset "Network Error Handling" begin
+            @test_throws ArgumentError fetch_gtfsrt("http://nonexistent-domain-12345.com/feed")
+        end
+    end
+
     @testset "Read Function" begin
         @testset "File Validation" begin
             # Test non-existent file

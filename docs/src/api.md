@@ -15,6 +15,7 @@ GTFSRealtime
 ```@docs
 download_gtfsrt
 read_gtfsrt
+fetch_gtfsrt
 ```
 
 ## Entity Helpers

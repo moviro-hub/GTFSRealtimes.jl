@@ -18,11 +18,14 @@ Pkg.add(url="https://github.com/moviro-hub/GTFSRealtimes.jl")
 ```julia
 using GTFSRealtimes
 
-# Download a GTFS Realtime feed
+# Download a GTFS Realtime feed to disk
 download_gtfsrt("https://api.example.com/gtfs-realtime/trip-updates", "trip_updates.pb")
 
-# Read the downloaded feed
+# Read the downloaded feed from disk
 feed = read_gtfsrt("trip_updates.pb")
+
+# Or fetch and decode in one step
+feed = fetch_gtfsrt("https://api.example.com/gtfs-realtime/trip-updates")
 
 # Access feed data
 println("Feed version: ", feed.header.gtfs_realtime_version)
