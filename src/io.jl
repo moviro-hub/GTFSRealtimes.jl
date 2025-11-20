@@ -102,6 +102,54 @@ function read_gtfsrt(file::String)::GTFSRealtime
     end
 end
 
+"""
+    fetch_gtfsrt(url::String) -> GTFSRealtime
+
+Download a GTFS Realtime feed from a URL directly and return a [`GTFSRealtime`](@ref) object.
+
+# Arguments
+- `url::String`: URL of the GTFS Realtime feed
+
+# Returns
+- `GTFSRealtime`: Parsed feed data with header and entities
+
+# Throws
+- `ArgumentError`: If the URL is invalid, download fails, or the feed is empty
+"""
+function fetch_gtfsrt(url::String)::GTFSRealtime
+    if isempty(url)
+        throw(ArgumentError("URL cannot be empty"))
+    end
+
+    buffer = PipeBuffer()
+
+    try
+        println("Fetching GTFS Realtime feed from: $url")
+        Downloads.download(url, buffer)
+
+        data = take!(buffer)
+        if isempty(data)
+            throw(ArgumentError("Downloaded feed from '$url' is empty"))
+        end
+
+        feed_message = decode_protobuf(data)
+        header = feed_message.header
+        entities = collect(feed_message.entity)
+
+        println("✓ Successfully fetched feed ($(length(entities)) entities)")
+        return GTFSRealtime(header, entities)
+
+    catch e
+        if isa(e, Downloads.RequestError)
+            throw(ArgumentError("Failed to download from URL '$url': $(string(e))"))
+        elseif isa(e, ArgumentError)
+            rethrow(e)
+        else
+            throw(ArgumentError("Unexpected error fetching GTFS Realtime feed: $(string(e))"))
+        end
+    end
+end
+
 function decode_protobuf(data::Vector{UInt8})
     # Create a decoder over an IO buffer for the protobuf data
     decoder = ProtoDecoder(IOBuffer(data))

@@ -78,7 +78,7 @@ include("shapes.jl")
 export GTFSRealtime
 
 # Export main functions
-export download_gtfsrt, read_gtfsrt
+export download_gtfsrt, read_gtfsrt, fetch_gtfsrt
 
 # Export helper functions
 export has_trip_updates, has_vehicle_positions, has_alerts, has_shapes, has_stops, has_trip_modifications
